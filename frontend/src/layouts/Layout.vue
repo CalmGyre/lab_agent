@@ -19,17 +19,23 @@
 
         <!-- 右侧管理员下拉菜单（这就是你缺少的部分） -->
         <div style="display: flex; align-items: center">
-          <el-dropdown>
+          <el-dropdown @command="handleCommand">
             <!-- 触发下拉的头部内容 -->
             <div style="display: flex; align-items: center; cursor: pointer">
-              <img v-if="userInfo?.avatar" :src="userInfo.avatar" alt="" style="width: 30px; border-radius: 50%" />
+              <img
+                v-if="userInfo?.avatar"
+                :src="userInfo.avatar"
+                alt=""
+                style="width: 30px; border-radius: 50%"
+              />
               <div style="margin-left: 3px">{{ userInfo?.name || userInfo?.username }}</div>
             </div>
             <!-- 下拉菜单项 -->
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item @click="goPerson">个人信息</el-dropdown-item>
-                <el-dropdown-item @click="handleLogout">退出登录</el-dropdown-item>
+                <el-dropdown-item command="profile">个人信息</el-dropdown-item>
+                <el-dropdown-item command="password">修改密码</el-dropdown-item>
+                <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -76,12 +82,14 @@ const router = useRouter() // 2. 定义 router
 
 const { userInfo } = useUser()
 
-const goPerson = () => {
-  router.push('/manager/profile')
-}
-
-const handleLogout = () => {
-  logout() // 3. 函数需要加括号调用
-  router.push('/login') // 4. route 改为 router
+const handleCommand = (command) => {
+  if (command === `profile`) {
+    router.push(`/manager/profile`)
+  } else if (command === `password`) {
+    router.push(`/manager/password`)
+  } else if (command === `logout`) {
+    logout()
+    router.push('/login')
+  }
 }
 </script>

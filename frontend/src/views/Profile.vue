@@ -20,7 +20,6 @@
             :http-request="handleFileUpload"
             :show-file-list="false"
             accept="image/jpeg,image/png,image/gif,image/webp"
-            :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
           >
             <img v-if="form.avatar" :src="form.avatar" class="avatar" />
@@ -30,7 +29,7 @@
         <el-form-item label="账号">
           <el-input disabled v-model="form.username" placeholder="请输入账号" />
         </el-form-item>
-        <el-form-item label="名称">
+        <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入名称" />
         </el-form-item>
         <el-form-item label="角色">
