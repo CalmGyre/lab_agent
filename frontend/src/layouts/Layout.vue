@@ -70,6 +70,14 @@
               <el-icon><User /></el-icon>
               <span>用户管理</span>
             </el-menu-item>
+            <el-menu-item index="/manager/my-reservation" v-if="userInfo?.role === 'student'">
+              <el-icon><Tickets /></el-icon>
+              <span>我的预约</span>
+            </el-menu-item>
+            <el-menu-item index="/manager/audit-reservation" v-if="userInfo?.role === 'admin'">
+              <el-icon><DocumentChecked /></el-icon>
+              <span>预约审核</span>
+            </el-menu-item>
           </el-menu>
         </el-aside>
 
@@ -83,7 +91,15 @@
 
 <script setup>
 import { logout } from '@/utils/auth'
-import { Menu as IconMenu, House, Setting, User, OfficeBuilding } from '@element-plus/icons-vue'
+import {
+  Menu as IconMenu,
+  House,
+  Setting,
+  User,
+  OfficeBuilding,
+  Tickets,
+  DocumentChecked
+} from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router' // 1. 需要引入 useRouter
 import { useUser } from '@/utils/user'
 
