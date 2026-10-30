@@ -11,6 +11,10 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRE_HOURS: int = 24
 
+    LLM_API_KEY: str
+    LLM_BASE_URL: str
+    LLM_MODEL: str
+
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env", env_file_encoding="utf-8"
     )

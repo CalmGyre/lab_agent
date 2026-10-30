@@ -78,6 +78,10 @@
               <el-icon><DocumentChecked /></el-icon>
               <span>预约审核</span>
             </el-menu-item>
+            <el-menu-item index="/manager/ai-chat">
+              <el-icon><ChatDotRound /></el-icon>
+              <span>AI智能助手</span>
+            </el-menu-item>
           </el-menu>
         </el-aside>
 
@@ -98,7 +102,8 @@ import {
   User,
   OfficeBuilding,
   Tickets,
-  DocumentChecked
+  Document,
+  ChatDotRound
 } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router' // 1. 需要引入 useRouter
 import { useUser } from '@/utils/user'

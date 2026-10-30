@@ -8,6 +8,10 @@ from app.models.user import User
 from app.common.response import PageResponse
 from app.schemas.reservation import ReservationCreateRequest, ReservationResponse
 
+import asyncio
+from datetime import datetime
+from app.database import SessionLocal
+
 
 def get_reservation_page_list(
     db: Session,
@@ -128,3 +132,27 @@ def create_reservation(db: Session, current_user: User, data: ReservationCreateR
     )
     db.add(resvervation_model)
     db.commit()
+
+
+def expire_pending_reservations():
+    db = SessionLocal()
+    try:
+        now = datetime.now()
+        today = now.strftime("%Y-%m-%d")
+        now_time = now.strftime("%H:%M")
+        items = db.query(Reservation).filter(Reservation.status == 0).all()
+        changed = False
+        for item in items:
+            if item.date < today or (item.date == today and item.end_time <= now_time):
+                item.status = 3
+                changed = True
+        if changed:
+            db.commit()
+    finally:
+        db.close()
+
+
+async def run_expire_scan():
+    while True:
+        expire_pending_reservations()
+        await asyncio.sleep(60)

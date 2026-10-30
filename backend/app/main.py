@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 from fastapi.staticfiles import StaticFiles
 
 from app.config import UPLOAD_DIR
@@ -17,10 +19,22 @@ from app.common.exceptions import (
     validation_excpetion_hadler,
     global_excpetion_hadler,
 )
+import asyncio
+from app.services import reservation_service
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    task = asyncio.create_task(
+        reservation_service.run_expire_scan()
+    )  # 启动项目开启异步的扫描任务
+    yield
+    task.cancel()  # 关闭项目同时取消异步任务
+
+
+app = FastAPI(lifespan=lifespan)
 
 origins = [
     "http://localhost:5173",
