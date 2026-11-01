@@ -25,6 +25,9 @@ lerna-debug.log*
 *.pid
 *.pid.lock
 
+backend/data/*
+!backend/data/.gitkeep
+
 # JavaScript / TypeScript dependencies and package-manager caches
 node_modules/
 .npm/
