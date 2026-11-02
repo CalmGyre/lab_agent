@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 
+from chromadb import logger
 from fastapi.staticfiles import StaticFiles
 
 from app.config import UPLOAD_DIR
@@ -20,13 +21,17 @@ from app.common.exceptions import (
     global_excpetion_hadler,
 )
 import asyncio
-from app.services import reservation_service
+from app.services import kb_service, reservation_service
 
 Base.metadata.create_all(bind=engine)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    try:
+        await asyncio.to_thread(kb_service.warmup)
+    except Exception:
+        logger.exception("向量库预热失败，服务继续启动")
     task = asyncio.create_task(
         reservation_service.run_expire_scan()
     )  # 启动项目开启异步的扫描任务
