@@ -20,12 +20,14 @@ def build_tools(db: Session, current_user: User):
             return json.dumps({"ok": False, "error": str(exc)}, ensure_ascii=False)
 
     @tool
-    def list_open_labs(keywords: str = "") -> str:
-        """查询开放的实验室列表"""
+    def list_open_labs(keywords: str = "", page: int = 1) -> str:
+        """按名称查询开放实验室，结果每页10条；page从1开始。"""
         try:
+            if page < 1:
+                return json.dumps({"ok": False, "error": "页码必须大于0"}, ensure_ascii=False)
             keywords = keywords.strip() or None
-            page = lab_service.get_lab_page_list(
-                db, page=1, page_size=10, keywords=keywords, status=1
+            result = lab_service.get_lab_page_list(
+                db, page=page, page_size=10, keywords=keywords, status=1
             )
             rows = [
                 {
@@ -36,19 +38,21 @@ def build_tools(db: Session, current_user: User):
                     "open_time": item.open_time,
                     "close_time": item.close_time,
                 }
-                for item in page.list
+                for item in result.list
             ]
-            return json.dumps({"total": page.total, "labs": rows}, ensure_ascii=False)
+            return json.dumps({"total": result.total, "page": page, "labs": rows}, ensure_ascii=False)
         except Exception as exc:
             return json.dumps({"ok": False, "error": str(exc)}, ensure_ascii=False)
 
     @tool
-    def list_lab_equipments(lab_id: int, keywords: str = "") -> str:
-        """查询某个实验室的设备列表"""
+    def list_lab_equipments(lab_id: int, keywords: str = "", page: int = 1) -> str:
+        """按实验室ID查询设备，结果每页10条；page从1开始。"""
         try:
+            if lab_id < 1 or page < 1:
+                return json.dumps({"ok": False, "error": "实验室ID和页码必须大于0"}, ensure_ascii=False)
             keywords = keywords.strip() or None
-            page = equipment_service.get_equipment_page_list(
-                db, page=1, page_size=10, lab_id=int(lab_id), keywords=keywords
+            result = equipment_service.get_equipment_page_list(
+                db, page=page, page_size=10, lab_id=int(lab_id), keywords=keywords
             )
             rows = [
                 {
@@ -56,14 +60,14 @@ def build_tools(db: Session, current_user: User):
                     "name": item.name,
                     "lab_id": item.lab_id,
                     "lab_name": item.lab_name,
-                    "sepc": item.spec,
+                    "spec": item.spec,
                     "quantity": item.quantity,
                     "status": item.status,
                 }
-                for item in page.list
+                for item in result.list
             ]
             return json.dumps(
-                {"total": page.total, "equipments": rows}, ensure_ascii=False
+                {"total": result.total, "page": page, "equipments": rows}, ensure_ascii=False
             )
         except Exception as exc:
             return json.dumps({"ok": False, "error": str(exc)}, ensure_ascii=False)
