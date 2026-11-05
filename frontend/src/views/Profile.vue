@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 40%">
+  <div class="settings-page">
     <el-card>
       <template #header>
         <div style="font-size: 16px; font-weight: bold">

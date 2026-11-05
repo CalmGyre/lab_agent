@@ -1,10 +1,5 @@
 <template>
-  <div class="login-container">
-    <div class="login-box">
-      <h1 style="font-size: 28px">实验室预约系统</h1>
-      <div style="margin-top: 5px; margin-bottom: 30px">基于Agent智能预约系统</div>
-
-      <el-form ref="formRef" :rules="rules" :model="form" label-width="0px" style="width: 100%">
+  <div class="auth-page"><div class="auth-shell"><section class="auth-intro"><div class="auth-brand"><span class="brand-mark"><img src="@/assets/imgs/logo.png" alt="" /></span><span>LAB / SPACE<small>智能实验室预约系统</small></span></div><div class="auth-story"><span class="eyebrow">A SPACE FOR WHAT'S NEXT</span><h1>为每一次<br />探索<span>，</span><br />留出空间。</h1><p>从预约实验室到管理设备，让专注留给真正重要的事。</p></div><div class="auth-footer">LAB / SPACE <span>探索，从这里开始 ↗</span></div></section><section class="auth-form"><div class="auth-form-inner"><span class="section-index">WELCOME BACK / 01</span><h2>欢迎回来</h2><p>登录后继续你的实验室探索。</p><el-form ref="formRef" :rules="rules" :model="form" label-width="0px" style="width: 100%">
         <el-form-item prop="username">
           <el-input
             size="large"
@@ -30,16 +25,14 @@
             style="width: 100%"
             @click="login"
             :loading="loadingValue"
-            >登 录</el-button
+            >进入工作台</el-button
           >
           <div style="text-align: right; margin-top: 20px">
             还没有账号？请
             <router-link style="color: var(--el-color-primary)" to="/register">注册</router-link>
           </div>
         </div>
-      </el-form>
-    </div>
-  </div>
+      </el-form></div></section></div></div>
 </template>
 
 <script setup>
@@ -82,20 +75,3 @@ const login = async () => {
   }
 }
 </script>
-
-<style scoped>
-.login-container {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.login-box {
-  width: 380px;
-  border-radius: 8px;
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  text-align: center;
-  background-color: white;
-}
-</style>

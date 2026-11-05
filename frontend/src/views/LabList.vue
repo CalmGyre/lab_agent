@@ -19,8 +19,9 @@
       </div>
 
       <div>
+        <el-empty v-if="!loading && !tableData.length" description="暂无实验室" />
         <el-row :gutter="16" v-loading="loading">
-          <el-col v-for="item in tableData" :key="item.id" :span="6" style="margin-bottom: 16px">
+          <el-col v-for="item in tableData" :key="item.id" :xs="24" :sm="12" :lg="8" :xl="6" style="margin-bottom: 16px">
             <el-card shadow="hover">
               <img
                 v-if="item.img"

@@ -1,61 +1,25 @@
 <template>
   <div>
-    <el-card>
+    <el-card class="chat-card">
       <template #header>
         <div style="font-size: 16px; font-weight: bold">
-          <span>AI智能助手</span>
+          <div class="chat-heading"><div><span class="section-index">LAB ASSISTANT / 在线</span><h2>AI 智能助手</h2><p>查询实验室、了解规则，或开始一次预约。</p></div><span class="chat-heading-icon">✳</span></div>
         </div>
       </template>
 
-      <div
-        ref="listRef"
-        style="
-          height: 480px;
-          overflow-y: auto;
-          padding: 8px 4px;
-          background-color: #fafafa;
-          border-radius: 6px;
-        "
-      >
-        <div
-          v-for="(item, index) in messages"
-          :key="index"
-          :style="{
-            display: 'flex',
-            justifyContent: item.role === 'user' ? 'flex-end' : 'flex-start',
-            marginBottom: '12px'
-          }"
-        >
-          <div
-            :style="{
-              maxWidth: '70%',
-              padding: '10px 12px',
-              borderRadius: '8px',
-              backgroundColor: item.role === 'user' ? '#409eff' : '#fff',
-              color: item.role === 'user' ? '#fff' : '#333',
-              lineHeight: '1.6',
-              boxShadow: '0 1px 2px rgba(0, 0, 0, 0.06)'
-            }"
-          >
-            <div
-              v-if="item.role === 'assistant' && item.status"
-              style="margin-bottom: 6px; font-size: 12px; color: #909399"
-            >
-              {{ item.status }}
-            </div>
-
-            <div
-              v-if="item.role === 'assistant' && item.steps?.length"
-              style="margin-bottom: 8px; font-size: 12px; color: #909399; line-height: 1.5"
-            >
-              <div v-for="(step, i) in item.steps" :key="i">· {{ step }}</div>
-            </div>
-            <div v-html="parseMarkdown(item.content)"></div>
+      <div ref="listRef" class="chat-list" aria-live="polite">
+        <div v-for="(item, index) in messages" :key="index" class="chat-row" :class="item.role">
+          <div v-if="item.role === 'assistant'" class="chat-avatar">✳</div>
+          <div class="chat-message">
+            <div class="chat-message-label">{{ item.role === 'user' ? '你' : 'LAB ASSISTANT' }}</div>
+            <div v-if="item.status" class="chat-status">{{ item.status }}</div>
+            <div v-if="item.steps?.length" class="chat-steps"><div v-for="(step, i) in item.steps" :key="i">{{ step }}</div></div>
+            <div class="chat-content" v-html="parseMarkdown(item.content)"></div>
           </div>
         </div>
       </div>
 
-      <div style="margin-top: 12px; display: flex; gap: 8px; align-items: flex-end">
+      <div class="chat-compose">
         <el-input
           v-model="input"
           type="textarea"
@@ -64,7 +28,7 @@
           @keydown.enter.exact.prevent="handleSend"
           @keydown.enter.shift.stop
         ></el-input>
-        <el-button type="primary" @click="handleSend" :loading="loading">发送</el-button>
+        <el-button type="primary" @click="handleSend" :loading="loading">发送 <span class="send-arrow">↗</span></el-button>
       </div>
     </el-card>
   </div>
