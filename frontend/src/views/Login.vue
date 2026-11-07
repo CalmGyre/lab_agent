@@ -75,3 +75,16 @@ const login = async () => {
   }
 }
 </script>
+
+<style scoped>
+.auth-page {
+  padding: 0;
+}
+
+.auth-shell {
+  width: 100%;
+  min-height: 100vh;
+  border-radius: 0;
+  box-shadow: none;
+}
+</style>
