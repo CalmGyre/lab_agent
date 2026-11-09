@@ -23,6 +23,12 @@ from app.common.exceptions import (
 import asyncio
 from app.services import kb_service, reservation_service
 
+import os
+
+# 强制 Hugging Face 使用离线模式
+os.environ["HF_HUB_OFFLINE"] = "1"
+os.environ["TRANSFORMERS_OFFLINE"] = "1"
+
 Base.metadata.create_all(bind=engine)
 
 
