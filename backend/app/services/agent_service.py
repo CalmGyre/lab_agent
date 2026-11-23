@@ -97,7 +97,9 @@ def _build_history(data: ChatRequest) -> list:
     return history
 
 
-async def stream_agent(db: Session, current_user: User, data: ChatRequest) -> AsyncIterator[dict]:
+async def stream_agent(
+    db: Session, current_user: User, data: ChatRequest
+) -> AsyncIterator[dict]:
     """生成器：边跑 Agent 边 yield 事件，供 SSE 推给前端。
 
     事件类型：status / tool_start / tool_end / token / done / error
@@ -208,12 +210,14 @@ def run_agent(db: Session, current_user: User, data: ChatRequest):
     if not messages:
         raise BusinessException(message="大模型没有任何返回内容")
     for message in reversed(messages):
-        if isinstance(message, AIMessage) and message.content.strip():
-            content = message.content.strip()
-            if isinstance(content, list):
-                content = "".join(
-                    part.get("text", "") if isinstance(part, dict) else str(part)
-                    for part in content
-                )
-            if str(content).strip():
-                return str(content).strip()
+        if not isinstance(message, AIMessage):
+            continue
+        content = message.content
+        if isinstance(content, list):
+            content = "".join(
+                part.get("text", "") if isinstance(part, dict) else str(part)
+                for part in content
+            )
+        content = str(content).strip()
+        if content:
+            return content
